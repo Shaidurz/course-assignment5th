@@ -1,0 +1,47 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    background: #2d2013;
+    color: #fff;
+    margin: 0;
+}
+.container{
+    margin: auto;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.flex{
+    margin-top: 100px;
+    display: flex;
+}
+input[type="text"]{
+    width: 300px;
+}
+.search-btn{
+    cursor: pointer;
+}
+.meals{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 20px;
+    margin-top: 20px;
+}
+.meal{
+    cursor: pointer;
+    position: relative;
+    height: 180px;
+    width: 180px;
+    text-align: center;
+}
+.meal img{
+    width: 100%;
+    height: 100%;
+    border: 4px #fff solid;
+    border-radius: 2px;
+}
+
