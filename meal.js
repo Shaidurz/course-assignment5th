@@ -1,53 +1,90 @@
-const search = document.getElementById("search");
-const submit = document.getElementById("submit");
-const mealElement = document.getElementById("meals");
-const resultHeading = document.getElementsByClassName("result-heading");
+const searchBtn = document.getElementById('searchMeal');
+searchBtn.addEventListener('click', function () {
+   const mealItem = document.getElementById('meal').value;
+   loadFoodData(mealItem);
+})
 
-function searchMeal(element){
-    element.preventDefault();
+const loadFoodData = mealName => {
+   const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${mealName}`
+   fetch(url)
+       .then(res => res.json())
+       .then(data => {
+           if(data.meals != null){
+               displayMealItem(data.meals);
+           }else{
+               alert('Meal is not Available');
+           }
+       })
+}
 
-    const term = search.value;
-    if(term.trim()){
-        fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            resultHeading.innerHTML = `<h2>Search Result for ${term}`;
-            if(data.meals === null){
-                resultHeading.innerHTML = `<h2> There are no Result for ${term}`;
-            }else{
-                mealElement.innerHTML = data.meals.map(
-                    meal => `
-                    <div onclick="displayMealDetail('${meal.strMeal}')" class="meal">
-                    <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-                    <div class="meal-info" data-mealID="${meal.idMeal}">
-                    <h3>${meal.strMeal}</h3>
-                    </div>
-                    `
-                )
-                .join("");
-            }
-        });
-    } else {
-        alert("Input a value");
-    }
-
+const displayMealItem = foodItems => {
+   const foodContainer = document.getElementById('mealContainer');
+   dataClear('mealContainer');
+   dataClear('mealItemDetails');
+   foodItems.forEach(item => {
+       const mealItemName = document.createElement('div');
+       mealItemName.className = 'mealItemList';
+       const foodInfo = `
+       <img src ="${item.strMealThumb}">
+       <h3>${item.strMeal}</h3>
+       `
+       mealItemName.innerHTML = foodInfo;
+       mealItemName.addEventListener('click', function () {
+           renderMealData(item.idMeal);
+       });
+       foodContainer.appendChild(mealItemName);
+   });
+   document.getElementById('meal').value = '';
 
 }
-submit.addEventListener('submit', searchMeal);
-
-const displayMealDetail = name => {
-    
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s${name}`
-    fetch(url)
-    .then(res => res.json())
-    .then(data => renderMealInfo(data));
+const renderMealData = meal => {
+   const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal}`;
+   fetch(url)
+       .then(res => res.json())
+       .then(data => {
+           if(data.meals != null){
+               detailInfo(data.meals);
+           }else{
+               alert('Items not found');
+           }
+       })
+       .catch(error => alert('Please input correct data'));
 }
-const renderMealInfo = meal => {
-    const countryDiv = document.getElementById("mealDetail");
-    countryDiv.innerHTML = `
-        <h1>${meal.strMeal}</h1>
-        
-        <img src="${meal.strMealThumb}">
-        `
+const detailInfo = foodDetail => {
+   const mealItemDetails = document.getElementById('mealItemDetails');
+   dataClear('mealItemDetails');
+   foodDetail.forEach(item => {
+       const mealItemDetail = document.createElement('div');
+       mealItemDetail.className = 'mealDetailInfo';
+       const itemName = document.createElement('h2');
+       const ingredients = document.createElement('h4');
+       ingredients.innerText = 'Ingredients';
+       itemName.innerText = item.strMeal;
+       const ul = document.createElement('ul');
+       const imgUrl = document.createElement('img');
+       imgUrl.src = item.strMealThumb;
+       mealItemDetail.appendChild(imgUrl);
+
+
+       const ingredientsItems = [item.strIngredient1,item.strIngredient2,item.strIngredient3,item.strIngredient4,
+           item.strIngredient5,item.strIngredient6,item.strIngredient7,item.strIngredient8,item.strIngredient9,item.strIngredient10];
+       ingredientsItems.forEach(item =>{
+           const li = document.createElement('li');
+           if(item != null && item != ''){
+               li.innerText = item;
+               ul.appendChild(li);
+           } 
+       })
+       mealItemDetail.appendChild(itemName);
+       mealItemDetail.appendChild(ingredients);
+       mealItemDetail.appendChild(ul);
+       mealItemDetails.appendChild(mealItemDetail);
+
+   });
+
+}
+
+const dataClear = id => {
+   const mealItemDetails = document.getElementById(id);
+   mealItemDetails.innerHTML = "";
 }

@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hunger Monster</title>
+    <title>Hungry-Monster</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
+
 <body>
-    <div id="mealDetail">
-
-    </div>
     <div class="container">
-        <div class="flex">
-            <form class="flex" id="submit">
-                <input type="text" id="search" placeholder="Search for Meal...">
-                <button class="search-btn" type="submit">Search</button>
-            </form>
-        </div>
-        <div class="result-heading"></div>
-        <div id="meals" class="meals"></div>
-    </div>
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="meal" type="text" class="form-control" placeholder="Search for meal ...">
+                <div class="input-group-append">
+                    <button id="searchMeal" type="button" class="btn btn-success">Search</button>
+                </div>
+            </div>
+        </form>
+        <div id="mealItemDetails"></div>
+        <div id="mealContainer"></div>
 
     </div>
+
     <script src="meal.js"></script>
 </body>
+
 </html>
